@@ -1,5 +1,5 @@
 import math
-from donnees import *
+from Jalon2_Simulation_Energie.donnees import *
 from itertools import combinations, permutations
 
 def distance(p1, p2):

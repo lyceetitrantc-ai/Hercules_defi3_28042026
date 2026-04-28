@@ -3,7 +3,7 @@ import matplotlib
 matplotlib.use('Agg')  # Mode non-interactif
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-from donnees import *
+from Jalon2_Simulation_Energie.donnees import *
 from planning import planifier_optimise, distance, calc_energie, calc_temps
 import numpy as np
 

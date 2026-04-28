@@ -4,7 +4,7 @@ Comparaison entre différentes stratégies de planning
 """
 
 import math
-from donnees import *
+from Jalon2_Simulation_Energie.donnees import *
 from planning import distance, calc_energie, calc_temps, evaluer_circuit_complet
 
 def strategie_naive():
