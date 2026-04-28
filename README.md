@@ -1,1 +1,0 @@
-# Hercules_defi3_28042026
