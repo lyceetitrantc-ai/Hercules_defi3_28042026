@@ -1,0 +1,47 @@
+# Coordonnées GPS (latitude, longitude) de chaque site
+DELIVERY_SITES_GPS = {
+    'Parc_Citadelle': (339326.49860095576, 6558226.0847189985),  # Point de départ/base
+    'ONERA': (343090.44435560703, 6554760.258257875),
+    'CHU_Lille': (337812.8429568434, 6552295.11133),
+    'Aerodrome_Marcq': (342361.7581008234, 6566411.099387424),
+    'Grand_Palais': (342303.9721531526, 6556036.5418923795),
+    'EuraTechnologies': (5336277.8473663458, 6556703.505479374),
+}
+
+# Conversion des coordonnées GPS en EPSG:3857 (Web Mercator) en mètres
+def gps_to_web_mercator(lat, lon):
+    """Convertir GPS (lat, lon) en coordonnées Web Mercator (x, y)"""
+    x = lon * 20037508.34 / 180.0
+    y = math.log(math.tan((90 + lat) * math.pi / 360.0)) * 20037508.34 / math.pi
+    return x, y
+
+# Création d'un dictionnaire avec les coordonnées converties
+DELIVERY_SITES = {
+    name: gps_to_web_mercator(lat, lon)
+    for name, (lat, lon) in DELIVERY_SITES_GPS.items()
+}
+
+# Spécifications de livraison : (nombre de livraisons par jour, kg par livraison)
+DELIVERY_SPECS = {
+    'ONERA': (5, 1.0),
+    'CHU_Lille': (5, 0.4),
+    'Aerodrome_Marcq': (5, 0.6),
+    'Grand_Palais': (5, 0.5),
+    'EuraTechnologies': (5, 0.5),
+}
+
+# Paramètres du drone
+DRONE_PARAMS = {
+    'max_payload': 2.0,  # kg
+    'max_range': 15.0,  # km
+    'base_consumption': 20.0,  # Wh/km sans charge
+    'load_consumption': 10.0,  # Wh/km par kg supplémentaire
+    'base_speed': 25.0,  # km/h sans charge
+    'speed_reduction': 0.15,  # réduction de 15% par kg
+}
+
+# Nombre de drones
+NUM_DRONES = 5
+
+def Conso_Energie(distance, Point_A, Point_B): 
+    y
