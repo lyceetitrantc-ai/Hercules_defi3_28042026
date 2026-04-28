@@ -1,4 +1,7 @@
 # Coordonnées GPS (latitude, longitude) de chaque site
+import math
+
+
 DELIVERY_SITES_GPS = {
     'Parc_Citadelle': (339326.49860095576, 6558226.0847189985),  # Point de départ/base
     'ONERA': (343090.44435560703, 6554760.258257875),
@@ -9,11 +12,22 @@ DELIVERY_SITES_GPS = {
 }
 
 # Conversion des coordonnées GPS en EPSG:3857 (Web Mercator) en mètres
-def gps_to_web_mercator(lat, lon):
-    """Convertir GPS (lat, lon) en coordonnées Web Mercator (x, y)"""
-    x = lon * 20037508.34 / 180.0
-    y = math.log(math.tan((90 + lat) * math.pi / 360.0)) * 20037508.34 / math.pi
-    return x, y
+import math
+
+def gps_to_web_mercator(a, b):
+    """
+    Fonction adaptée à TON code :
+    - si on donne (lat, lon) → retourne tel quel
+    - si on donne 2 points → calcule la distance
+    """
+   
+    if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+        return (a, b)  # on ne touche pas aux coordonnées
+   
+    x1, y1 = a
+    x2, y2 = b
+   
+    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
 # Création d'un dictionnaire avec les coordonnées converties
 DELIVERY_SITES = {
@@ -32,9 +46,13 @@ DRONE_PARAMS = {
     'speed_reduction': 0.15,  # réduction de 15% par kg
 }
 
-def Conso_Energie(Point_A, Point_B): 
-    Point_A_B = gps_to_web_mercator(Point_A, Point_B) / 1000 
+def Conso_Energie(Point_A, Point_B):
+    Point_A_B = gps_to_web_mercator(Point_A, Point_B) / 1000
     conso_energie = Point_A_B * (DRONE_PARAMS["base_consumption"] + DRONE_PARAMS["max_payload"])
     return conso_energie
 
 print(Conso_Energie(DELIVERY_SITES['Parc_Citadelle'], DELIVERY_SITES['ONERA']))
+print(Conso_Energie(DELIVERY_SITES['Parc_Citadelle'], DELIVERY_SITES['CHU_Lille']))
+print(Conso_Energie(DELIVERY_SITES['Parc_Citadelle'], DELIVERY_SITES['Aerodrome_Marcq']))
+print(Conso_Energie(DELIVERY_SITES['Parc_Citadelle'], DELIVERY_SITES['Grand_Palais']))
+print(Conso_Energie(DELIVERY_SITES['Parc_Citadelle'], DELIVERY_SITES['EuraTechnologies']))
