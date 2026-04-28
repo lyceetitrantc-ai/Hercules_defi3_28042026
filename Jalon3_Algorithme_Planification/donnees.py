@@ -1,17 +1,27 @@
 import math
 
-# Coordonnées en EPSG:3857 (Web Mercator) en mètres - déjà converties
+# Coordonnées GPS (latitude, longitude) de chaque site - EPSG:4326
 DELIVERY_SITES_GPS = {
-    'Parc_Citadelle': (339326.49860095576, 6558226.0847189985),  # Point de départ/base
-    'ONERA': (343090.44435560703, 6554760.258257875),  # Corrigé de 5343090
-    'CHU_Lille': (337812.8429568434, 6552295.111338628),
-    'Aerodrome_Marcq': (342361.7581008234, 6566411.099387424),
-    'Grand_Palais': (342303.9721531526, 6556036.5418923795),
-    'EuraTechnologies': (337527.8473663458, 6556703.505479374),  # Corrigé de 336277
+    'Parc_Citadelle': (50.631, 3.053),  # Point de départ/base (approximation)
+    'ONERA': (50.603, 3.091),
+    'CHU_Lille': (50.581, 3.057),
+    'Aerodrome_Marcq': (50.682, 3.081),
+    'Grand_Palais': (50.603, 3.089),
+    'EuraTechnologies': (50.604, 3.106),
 }
 
-# Utiliser les coordonnées Web Mercator directement
-DELIVERY_SITES = DELIVERY_SITES_GPS.copy()
+# Conversion des coordonnées GPS en EPSG:3857 (Web Mercator) en mètres
+def gps_to_web_mercator(lat, lon):
+    """Convertir GPS (lat, lon) en coordonnées Web Mercator (x, y)"""
+    x = lon * 20037508.34 / 180.0
+    y = math.log(math.tan((90 + lat) * math.pi / 360.0)) * 20037508.34 / math.pi
+    return x, y
+
+# Création d'un dictionnaire avec les coordonnées converties
+DELIVERY_SITES = {
+    name: gps_to_web_mercator(lat, lon)
+    for name, (lat, lon) in DELIVERY_SITES_GPS.items()
+}
 
 # Spécifications de livraison : (nombre de livraisons par jour, kg par livraison)
 DELIVERY_SPECS = {
